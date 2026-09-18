@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เว็บส่วนตัว</title>
+<meta name="description" content="เว็บไซต์ส่วนตัว — เรื่องราว ประสบการณ์ และผลงาน">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" id="brand" href="#top">—</a>
+    <button class="icon-btn nav__toggle" id="menuBtn" aria-label="เมนู">☰</button>
+    <nav class="nav__links" id="navLinks">
+      <a href="#about">เกี่ยวกับ</a>
+      <a href="#journey">เส้นทาง</a>
+      <a href="#skills">ทักษะ</a>
+      <a href="#works">ผลงาน</a>
+      <a href="#contact">ติดต่อ</a>
+    </nav>
+    <button class="icon-btn nav__theme" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">🌙</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="hero__bg" id="heroBg"></div>
+    <div class="wrap hero__inner">
+      <div class="avatar" id="avatar"></div>
+      <div id="heroText"></div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="about">
+    <div class="wrap">
+      <div class="section__head"><h2 class="section__title" id="aboutTitle"></h2></div>
+      <div class="about">
+        <div id="aboutText" class="reveal"></div>
+        <div class="facts reveal" id="aboutFacts"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="journey" data-list="timeline">
+    <div class="wrap">
+      <div class="section__head"><h2 class="section__title" id="timelineTitle"></h2></div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="skills" data-list="skillsGrid">
+    <div class="wrap">
+      <div class="section__head"><h2 class="section__title" id="skillsTitle"></h2></div>
+      <div class="skill-grid" id="skillsGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" id="works" data-list="worksGrid">
+    <div class="wrap">
+      <div class="section__head"><h2 class="section__title" id="worksTitle"></h2></div>
+      <div class="work-grid" id="worksGrid"></div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="interests" data-list="interestsGrid">
+    <div class="wrap">
+      <div class="section__head"><h2 class="section__title" id="interestsTitle"></h2></div>
+      <div class="interest-grid" id="interestsGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="wrap">
+      <div class="section__head"><h2 class="section__title" id="contactTitle"></h2></div>
+      <div class="contact-card reveal" id="contactBody"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer" style="padding:0;border:0">
+    <div id="footerLeft"></div>
+    <a class="to-top" href="#top">กลับขึ้นด้านบน ↑</a>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

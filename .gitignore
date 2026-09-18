@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+*.log
+
+# local dev-server config (machine-specific absolute paths)
+.claude/

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ราคาทองวันนี้ · ทองคำแท่ง ทองรูปพรรณ ย้อนหลัง กราฟ</title>
+<meta name="description" content="เช็กราคาทองคำวันนี้ ทองคำแท่ง ทองรูปพรรณ ตามประกาศสมาคมค้าทองคำ พร้อมราคาย้อนหลังระหว่างวัน กราฟ และเครื่องคำนวณราคาทอง">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪙</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/gold.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top__inner">
+    <a class="logo" href="#top"><span class="logo__mark">฿</span> ราคาทองวันนี้</a>
+    <nav class="top__nav">
+      <a href="#rounds">ราคาย้อนหลัง</a>
+      <a href="#chart-sec">กราฟ</a>
+      <a href="#purity">ทองทุกชนิด</a>
+      <a href="#calc">คำนวณ</a>
+      <a href="#news">ข่าว</a>
+    </nav>
+    <button class="icon-btn" id="refreshBtn" aria-label="รีเฟรชราคา" title="รีเฟรชราคา">⟳</button>
+    <button class="icon-btn" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">🌙</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="status" id="status"></div>
+      <div class="headline" id="headline"></div>
+      <div class="price-grid" id="priceGrid"></div>
+      <div class="strip" id="strip"></div>
+    </div>
+  </section>
+
+  <section class="section" id="chart-sec">
+    <div class="wrap">
+      <div class="section__head">
+        <h2>กราฟราคาทองคำแท่ง (ขายออก)</h2>
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-tab="today">ระหว่างวัน</button>
+          <button class="chart-tab" data-tab="week">7 วัน</button>
+        </div>
+      </div>
+      <div class="card chart-card"><div class="chart-wrap" id="chart"></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="rounds">
+    <div class="wrap">
+      <div class="section__head">
+        <h2>ประกาศราคาระหว่างวัน</h2>
+        <span class="section__note">เรียงจากประกาศล่าสุด</span>
+      </div>
+      <div class="card table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>วัน/เวลา</th><th>ครั้ง</th>
+              <th>แท่ง รับซื้อ</th><th>แท่ง ขายออก</th>
+              <th>ฐานภาษี</th><th>รูปพรรณ ขายออก</th>
+              <th>Gold spot</th><th>ค่าเงินบาท</th><th>ขึ้น/ลง</th>
+            </tr>
+          </thead>
+          <tbody id="roundsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="purity">
+    <div class="wrap">
+      <div class="section__head">
+        <h2>ราคาทองทุกชนิดตามเปอร์เซ็นต์ทอง</h2>
+        <span class="section__note">คำนวณจากราคารับซื้อล่าสุด</span>
+      </div>
+      <div class="card table-scroll">
+        <table>
+          <thead>
+            <tr><th>ชนิดความบริสุทธิ์</th><th>ราคาขาย/บาท</th><th>ราคารับซื้อ/บาท</th><th>ราคารับซื้อ/กรัม</th></tr>
+          </thead>
+          <tbody id="purityBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="calc">
+    <div class="wrap">
+      <div class="section__head"><h2>เครื่องคำนวณราคาทอง</h2></div>
+      <div class="card calc">
+        <div>
+          <div class="field">
+            <label for="calcType">ชนิดทอง</label>
+            <select id="calcType">
+              <option value="bar">ทองคำแท่ง 96.5%</option>
+              <option value="orn">ทองรูปพรรณ 96.5%</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="calcWeight">น้ำหนัก</label>
+            <input type="number" id="calcWeight" value="1" min="0" step="0.01" inputmode="decimal">
+            <div class="quick" id="quickWeights">
+              <button data-w="0.25">1 สลึง</button>
+              <button data-w="0.5">2 สลึง</button>
+              <button data-w="1">1 บาท</button>
+              <button data-w="2">2 บาท</button>
+              <button data-w="5">5 บาท</button>
+              <button data-w="10">10 บาท</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="calcUnit">หน่วยน้ำหนัก</label>
+            <select id="calcUnit">
+              <option value="baht">บาททอง</option>
+              <option value="salueng">สลึง</option>
+              <option value="gram">กรัม</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="calcFee">ค่ากำเหน็จต่อบาททอง (เฉพาะทองรูปพรรณ)</label>
+            <input type="number" id="calcFee" value="0" min="0" step="100" inputmode="decimal" placeholder="เช่น 500">
+          </div>
+        </div>
+        <div class="result" id="calcResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="news">
+    <div class="wrap">
+      <div class="section__head"><h2>ข่าวและแนวโน้มราคาทอง</h2></div>
+      <div class="news-grid" id="newsGrid"></div>
+      <div class="notice" style="margin-top:18px">
+        <span>⚠️</span>
+        <div><b>ข้อมูลเพื่อการอ้างอิงเท่านั้น</b> — ราคาซื้อขายจริงขึ้นอยู่กับร้านทองแต่ละร้าน
+        เว็บนี้ดึงราคาตามประกาศสมาคมค้าทองคำ ไม่ใช่คำแนะนำการลงทุน</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer" style="padding:0;border:0;margin:0">
+    <div>ข้อมูลจาก <a href="https://xn--42cah7d0cxcvbbb9x.com/" target="_blank" rel="noopener noreferrer">ราคาทองคําวันนี้.com</a> · ประกาศสมาคมค้าทองคำ</div>
+    <a href="#top" style="color:inherit;text-decoration:none">กลับขึ้นด้านบน ↑</a>
+  </div>
+</footer>
+
+<script src="assets/js/gold-data.js"></script>
+<script src="assets/js/gold.js"></script>
+</body>
+</html>

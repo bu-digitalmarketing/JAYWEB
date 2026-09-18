@@ -1,0 +1,411 @@
+/* =========================================================
+   ราคาทองวันนี้ — Stylesheet
+   ========================================================= */
+
+:root {
+  --bg:        #faf7f0;
+  --bg-soft:   #ffffff;
+  --bg-sunken: #f2ede1;
+  --text:      #1a1712;
+  --text-soft: #5c5447;
+  --text-mute: #8d8475;
+  --line:      #e6ddc9;
+  --gold:      #b8860b;
+  --gold-soft: #fdf4dd;
+  --up:        #c0392b;   /* ไทย: ขึ้น = แดง */
+  --up-soft:   #fdecea;
+  --down:      #1e8449;   /* ลง = เขียว */
+  --down-soft: #e7f6ed;
+  --flat:      #8d8475;
+  --shadow:    0 1px 2px rgba(26,23,18,.05), 0 8px 24px rgba(26,23,18,.07);
+  --shadow-lg: 0 2px 6px rgba(26,23,18,.07), 0 20px 50px rgba(26,23,18,.12);
+  --radius:    18px;
+  --radius-sm: 11px;
+  --maxw:      1120px;
+}
+
+:root[data-theme="dark"] {
+  --bg:        #14120d;
+  --bg-soft:   #1e1b14;
+  --bg-sunken: #27231a;
+  --text:      #f5f0e4;
+  --text-soft: #bdb5a3;
+  --text-mute: #8d8475;
+  --line:      #37312440;
+  --line:      #373124;
+  --gold:      #f0b641;
+  --gold-soft: #2c2413;
+  --up:        #ff6b5b;
+  --up-soft:   #35211e;
+  --down:      #4ade80;
+  --down-soft: #16291d;
+  --shadow:    0 1px 2px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.4);
+  --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 20px 50px rgba(0,0,0,.55);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "IBM Plex Sans Thai", "Noto Sans Thai", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px; line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  transition: background .3s, color .3s;
+}
+
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 18px; }
+
+/* ---------- Header ---------- */
+.top {
+  position: sticky; top: 0; z-index: 40;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.top__inner { display: flex; align-items: center; gap: 14px; height: 62px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; text-decoration: none; color: inherit; }
+.logo__mark {
+  width: 34px; height: 34px; border-radius: 10px; flex: none;
+  background: linear-gradient(140deg, #f7d774, var(--gold));
+  display: grid; place-items: center; color: #3a2c05; font-size: .95rem; font-weight: 800;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+}
+.top__nav { display: flex; gap: 2px; margin-left: auto; }
+.top__nav a {
+  text-decoration: none; color: var(--text-soft); font-size: .88rem; font-weight: 500;
+  padding: 6px 12px; border-radius: 999px; white-space: nowrap;
+}
+.top__nav a:hover { color: var(--text); background: var(--bg-sunken); }
+.icon-btn {
+  display: grid; place-items: center; width: 36px; height: 36px; flex: none;
+  border: 1px solid var(--line); border-radius: 50%; background: var(--bg-soft);
+  color: var(--text-soft); cursor: pointer; font-size: .95rem;
+  transition: color .2s, border-color .2s, transform .2s;
+}
+.icon-btn:hover { color: var(--gold); border-color: var(--gold); }
+.icon-btn:active { transform: scale(.92); }
+.icon-btn.spin { animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Status bar ---------- */
+.status {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 0 0; font-size: .84rem; color: var(--text-mute);
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--down); flex: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--down) 22%, transparent); }
+.dot.stale { background: var(--text-mute); box-shadow: 0 0 0 4px color-mix(in srgb, var(--text-mute) 20%, transparent); }
+.dot.live { animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 8px transparent; } }
+
+/* ---------- Hero price cards ---------- */
+.hero { padding: 22px 0 8px; }
+.headline { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 6px 0 4px; }
+.headline h1 { font-size: clamp(1.4rem, 3.6vw, 1.9rem); margin: 0; letter-spacing: -.02em; }
+.headline .meta { color: var(--text-mute); font-size: .88rem; }
+
+.price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 18px; }
+.pcard {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius); padding: 22px 24px;
+  background: var(--bg-soft); border: 1px solid var(--line); box-shadow: var(--shadow);
+}
+.pcard::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+  background: linear-gradient(90deg, #f7d774, var(--gold)); }
+.pcard__label { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 1.02rem; margin-bottom: 14px; }
+.pcard__badge { font-size: .72rem; font-weight: 600; padding: 2px 9px; border-radius: 999px;
+  background: var(--gold-soft); color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent); }
+.pcard__rows { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; }
+.prow__k { font-size: .8rem; color: var(--text-mute); }
+.prow__v { font-size: clamp(1.45rem, 4vw, 1.85rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.25; }
+.prow__v.sell { color: var(--gold); }
+.pcard__unit { margin-top: 10px; font-size: .78rem; color: var(--text-mute); }
+
+.chg {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-weight: 700; font-size: .9rem; padding: 3px 11px; border-radius: 999px;
+}
+.chg.up   { color: var(--up);   background: var(--up-soft); }
+.chg.down { color: var(--down); background: var(--down-soft); }
+.chg.flat { color: var(--flat); background: var(--bg-sunken); }
+
+/* ---------- Summary strip ---------- */
+.strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+.strip__item {
+  padding: 13px 16px; border-radius: var(--radius-sm);
+  background: var(--bg-soft); border: 1px solid var(--line);
+}
+.strip__k { font-size: .78rem; color: var(--text-mute); }
+.strip__v { font-weight: 700; font-size: 1.08rem; }
+
+/* ---------- Sections ---------- */
+.section { padding: 40px 0; }
+.section__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.section__head h2 { font-size: 1.25rem; margin: 0; letter-spacing: -.015em; display: flex; align-items: center; gap: 10px; }
+.section__head h2::before { content: ""; width: 20px; height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, #f7d774, var(--gold)); }
+.section__note { font-size: .82rem; color: var(--text-mute); margin-left: auto; }
+
+.card {
+  border-radius: var(--radius); background: var(--bg-soft);
+  border: 1px solid var(--line); box-shadow: var(--shadow); overflow: hidden;
+}
+
+/* ---------- Tables ---------- */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; min-width: 560px; }
+thead th {
+  text-align: right; font-size: .78rem; font-weight: 600; color: var(--text-mute);
+  padding: 12px 14px; background: var(--bg-sunken); white-space: nowrap;
+  border-bottom: 1px solid var(--line); position: sticky; top: 0;
+}
+thead th:first-child, tbody td:first-child { text-align: left; }
+tbody td { padding: 11px 14px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--bg-sunken); }
+tbody tr.is-latest { background: var(--gold-soft); }
+tbody tr.is-latest td:first-child { font-weight: 700; }
+.cell-up { color: var(--up); font-weight: 600; }
+.cell-down { color: var(--down); font-weight: 600; }
+.cell-flat { color: var(--text-mute); }
+.muted { color: var(--text-mute); }
+
+/* ---------- Chart ---------- */
+.chart-card { padding: 18px 20px 12px; }
+.chart-tabs { display: flex; gap: 6px; }
+.chart-tab {
+  border: 1px solid var(--line); background: var(--bg); color: var(--text-soft);
+  padding: 5px 14px; border-radius: 999px; font: inherit; font-size: .84rem; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+}
+.chart-tab:hover { border-color: var(--gold); color: var(--gold); }
+.chart-tab.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+:root[data-theme="dark"] .chart-tab.active { color: #211a08; }
+.chart-wrap { width: 100%; }
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .axis { fill: var(--text-mute); font-size: 11px; }
+.chart .line { fill: none; stroke: var(--gold); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.chart .area { fill: url(#goldFade); }
+.chart .pt { fill: var(--gold); stroke: var(--bg-soft); stroke-width: 2; }
+.chart .lastlabel { fill: var(--text); font-size: 12px; font-weight: 700; }
+
+/* ---------- Calculator ---------- */
+.calc { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; padding: 24px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: .82rem; color: var(--text-mute); margin-bottom: 6px; font-weight: 500; }
+.field input, .field select {
+  width: 100%; padding: 11px 14px; font: inherit; font-size: 1rem;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--bg); color: var(--text);
+}
+.field input:focus, .field select:focus { outline: 2px solid color-mix(in srgb, var(--gold) 55%, transparent); outline-offset: 1px; border-color: var(--gold); }
+.quick { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.quick button {
+  border: 1px solid var(--line); background: var(--bg); color: var(--text-soft);
+  padding: 4px 12px; border-radius: 999px; font: inherit; font-size: .82rem; cursor: pointer;
+}
+.quick button:hover { border-color: var(--gold); color: var(--gold); }
+
+.result { background: var(--bg-sunken); border-radius: var(--radius); padding: 20px; align-self: start; }
+.result h3 { margin: 0 0 14px; font-size: 1rem; }
+.rrow { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-bottom: 1px dashed var(--line); }
+.rrow:last-of-type { border-bottom: 0; }
+.rrow span { color: var(--text-soft); font-size: .9rem; }
+.rrow b { font-weight: 700; font-size: 1.02rem; }
+.rrow b.gold { color: var(--gold); }
+.result__note { font-size: .78rem; color: var(--text-mute); margin-top: 12px; line-height: 1.6; }
+
+/* ---------- News ---------- */
+.news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.news {
+  padding: 20px; border-radius: var(--radius);
+  background: var(--bg-soft); border: 1px solid var(--line); box-shadow: var(--shadow);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.news:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: color-mix(in srgb, var(--gold) 40%, var(--line)); }
+.news__date { font-size: .76rem; color: var(--gold); font-weight: 600; }
+.news__title { font-size: 1rem; font-weight: 700; margin: 5px 0 8px; line-height: 1.5; }
+.news__body { font-size: .88rem; color: var(--text-soft); margin: 0; }
+
+/* ---------- Notes / footer ---------- */
+.notice {
+  display: flex; gap: 12px; padding: 16px 18px; border-radius: var(--radius-sm);
+  background: var(--gold-soft); border: 1px solid color-mix(in srgb, var(--gold) 28%, transparent);
+  font-size: .87rem; color: var(--text-soft);
+}
+.notice b { color: var(--text); }
+.footer { padding: 28px 0 40px; border-top: 1px solid var(--line); margin-top: 20px;
+  color: var(--text-mute); font-size: .84rem; display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; }
+.footer a { color: var(--gold); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 820px) {
+  .calc { grid-template-columns: 1fr; gap: 16px; padding: 18px; }
+  .top__nav { display: none; }
+  .section { padding: 30px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* =========================================================
+   🌈 ธีมสายรุ้ง (Rainbow) — เขียนทับสีเดิม
+   ========================================================= */
+
+:root {
+  --c1: #ff2d55;  /* แดง   */
+  --c2: #ff7a00;  /* ส้ม   */
+  --c3: #f5c400;  /* เหลือง */
+  --c4: #22b573;  /* เขียว  */
+  --c5: #0aa2e0;  /* ฟ้า   */
+  --c6: #5e5ce6;  /* น้ำเงิน-ม่วง */
+  --c7: #e0399b;  /* ชมพู  */
+  --rainbow: linear-gradient(90deg,
+    var(--c1) 0%, var(--c2) 17%, var(--c3) 34%, var(--c4) 51%,
+    var(--c5) 68%, var(--c6) 84%, var(--c7) 100%);
+
+  --bg:        #fbf9ff;
+  --bg-soft:   #ffffff;
+  --bg-sunken: #f4f1fd;
+  --text:      #191331;
+  --text-soft: #554a78;
+  --text-mute: #8d84ad;
+  --line:      #e8e3f7;
+
+  --gold:      #7b3fe4;
+  --gold-soft: #f1e9ff;
+
+  --up:        #ff2d55;  --up-soft:   #ffe9ee;
+  --down:      #00a86b;  --down-soft: #e2f8ef;
+
+  --shadow:    0 1px 2px rgba(60,30,110,.06), 0 10px 26px rgba(60,30,110,.09);
+  --shadow-lg: 0 2px 6px rgba(60,30,110,.10), 0 22px 54px rgba(60,30,110,.16);
+}
+
+:root[data-theme="dark"] {
+  --c1: #ff5c7a; --c2: #ffa03d; --c3: #ffd93d; --c4: #3ee08f;
+  --c5: #3ec9ff; --c6: #9b8bff; --c7: #ff6fc8;
+
+  --bg:        #0f0a1e;
+  --bg-soft:   #181030;
+  --bg-sunken: #211741;
+  --text:      #f4f0ff;
+  --text-soft: #c3b8e6;
+  --text-mute: #8e83b5;
+  --line:      #2e2350;
+
+  --gold:      #c08cff;
+  --gold-soft: #2a1b4d;
+
+  --up:        #ff5c7a;  --up-soft:   #3a1626;
+  --down:      #3ee08f;  --down-soft: #0f3328;
+
+  --shadow:    0 1px 2px rgba(0,0,0,.5), 0 10px 28px rgba(0,0,0,.45);
+  --shadow-lg: 0 2px 6px rgba(0,0,0,.55), 0 22px 54px rgba(0,0,0,.6);
+}
+
+body {
+  background:
+    radial-gradient(1100px 440px at 10% -10%, color-mix(in srgb, var(--c6) 16%, transparent), transparent 70%),
+    radial-gradient(900px 400px at 92% -6%,  color-mix(in srgb, var(--c1) 14%, transparent), transparent 70%),
+    radial-gradient(800px 420px at 50% 108%, color-mix(in srgb, var(--c5) 12%, transparent), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+/* --- แถบสายรุ้ง --- */
+.logo__mark { background: var(--rainbow); color: #fff; box-shadow: 0 2px 10px rgba(94,92,230,.35); }
+.section__head h2::before { background: var(--rainbow); width: 26px; }
+.pcard::before { height: 4px; background: var(--rainbow); }
+.price-grid .pcard:nth-child(1)::before { background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3)); }
+.price-grid .pcard:nth-child(2)::before { background: linear-gradient(90deg, var(--c4), var(--c5), var(--c6)); }
+
+.top { border-bottom: 0; box-shadow: 0 1px 0 var(--line); }
+.top::after { content: ""; display: block; height: 3px; background: var(--rainbow); opacity: .9; }
+
+/* --- ตัวเลขราคาขาย ไล่สีสายรุ้ง --- */
+.prow__v.sell {
+  background: var(--rainbow);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+.pcard__badge {
+  background: var(--rainbow); color: #fff; border: 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+
+/* --- แถบสรุป: ขีดสีต่างกันทีละอัน --- */
+.strip__item { position: relative; overflow: hidden; padding-left: 20px; }
+.strip__item::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+.strip__item:nth-child(1)::before { background: var(--c1); }
+.strip__item:nth-child(2)::before { background: var(--c2); }
+.strip__item:nth-child(3)::before { background: var(--c4); }
+.strip__item:nth-child(4)::before { background: var(--c5); }
+.strip__item:nth-child(5)::before { background: var(--c6); }
+
+/* --- การ์ด/ตาราง --- */
+.card { position: relative; }
+.card.table-scroll::before,
+.card.chart-card::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+  background: var(--rainbow); z-index: 2;
+}
+tbody tr.is-latest {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--c1) 12%, transparent),
+    color-mix(in srgb, var(--c3) 12%, transparent),
+    color-mix(in srgb, var(--c5) 12%, transparent));
+}
+
+/* --- ปุ่มแท็บกราฟ --- */
+.chart-tab.active { background: var(--rainbow); border-color: transparent; color: #fff; }
+:root[data-theme="dark"] .chart-tab.active { color: #fff; }
+.chart .line { stroke: url(#rainbowStroke); stroke-width: 3; }
+.chart .area { fill: url(#rainbowH); opacity: .3; }
+.chart .pt   { fill: var(--c6); }
+
+/* --- ข่าว: หัวการ์ดไล่สีวน --- */
+.news { position: relative; overflow: hidden; }
+.news::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; }
+.news:nth-child(4n+1)::before { background: linear-gradient(90deg, var(--c1), var(--c2)); }
+.news:nth-child(4n+2)::before { background: linear-gradient(90deg, var(--c3), var(--c4)); }
+.news:nth-child(4n+3)::before { background: linear-gradient(90deg, var(--c4), var(--c5)); }
+.news:nth-child(4n+4)::before { background: linear-gradient(90deg, var(--c6), var(--c7)); }
+.news__date { color: var(--c6); }
+
+/* --- ปุ่มน้ำหนักด่วน --- */
+.quick button:nth-child(6n+1):hover { border-color: var(--c1); color: var(--c1); }
+.quick button:nth-child(6n+2):hover { border-color: var(--c2); color: var(--c2); }
+.quick button:nth-child(6n+3):hover { border-color: var(--c4); color: var(--c4); }
+.quick button:nth-child(6n+4):hover { border-color: var(--c5); color: var(--c5); }
+.quick button:nth-child(6n+5):hover { border-color: var(--c6); color: var(--c6); }
+.quick button:nth-child(6n+6):hover { border-color: var(--c7); color: var(--c7); }
+
+.result { background: linear-gradient(140deg,
+  color-mix(in srgb, var(--c6) 10%, var(--bg-sunken)),
+  color-mix(in srgb, var(--c1) 8%,  var(--bg-sunken))); }
+.rrow b.gold {
+  background: var(--rainbow);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.notice {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--c3) 16%, var(--bg-soft)),
+    color-mix(in srgb, var(--c7) 12%, var(--bg-soft)));
+  border-color: color-mix(in srgb, var(--c2) 35%, transparent);
+}
+.footer { border-top: 0; background-image: var(--rainbow); background-size: 100% 3px; background-repeat: no-repeat; }
+.footer a { color: var(--c6); }
+.icon-btn:hover { color: var(--c6); border-color: var(--c6); }
+.dot.live { background: var(--c4); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c4) 25%, transparent); }
