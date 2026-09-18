@@ -409,3 +409,57 @@ tbody tr.is-latest {
 .footer a { color: var(--c6); }
 .icon-btn:hover { color: var(--c6); border-color: var(--c6); }
 .dot.live { background: var(--c4); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c4) 25%, transparent); }
+
+/* =========================================================
+   ปรับน้ำหนักการมองเห็น: ราคาปัจจุบันเด่นขึ้น กราฟเล็กลง
+   ========================================================= */
+
+/* --- การ์ดราคา: ให้ "ขายออก" เป็นตัวเอกของหน้า --- */
+.pcard { padding: 26px 28px 24px; }
+.pcard__label { font-size: 1.1rem; margin-bottom: 18px; }
+
+.pcard__rows {
+  grid-template-columns: auto 1fr;
+  gap: 4px 28px;
+  align-items: end;
+}
+
+/* ราคารับซื้อ = ข้อมูลประกอบ ย่อลงและลดความเข้ม */
+.pcard__rows > div:first-child .prow__k { font-size: .78rem; }
+.pcard__rows > div:first-child .prow__v {
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  font-weight: 600;
+  color: var(--text-mute);
+}
+
+/* ราคาขายออก = ตัวเลขหลัก */
+.pcard__rows > div:last-child .prow__k {
+  font-size: .82rem; font-weight: 600; color: var(--text-soft);
+}
+.prow__v.sell {
+  font-size: clamp(2.5rem, 7.5vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
+
+/* ป้ายขึ้น/ลงประจำวัน ติดกับตัวเลขหลัก */
+.pcard__delta { margin-top: 10px; }
+.pcard__delta .chg { font-size: .88rem; padding: 4px 12px; }
+
+.headline h1 { font-size: clamp(1.5rem, 4vw, 2.1rem); }
+.headline .chg { font-size: 1rem; padding: 5px 14px; }
+
+/* --- กราฟ: ย่อลงให้เป็นข้อมูลประกอบ --- */
+.chart-card { padding: 14px 16px 8px; }
+svg.chart { max-height: 230px; }
+.chart .axis { font-size: 10px; }
+.chart .lastlabel { font-size: 11px; }
+.chart .line { stroke-width: 2.2; }
+
+@media (max-width: 560px) {
+  .pcard { padding: 20px 20px 18px; }
+  .pcard__rows { grid-template-columns: 1fr; gap: 2px; }
+  .pcard__rows > div:first-child { order: 2; margin-top: 6px; }
+  svg.chart { max-height: 190px; }
+}

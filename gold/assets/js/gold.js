@@ -138,6 +138,7 @@ function renderHero() {
         <div><div class="prow__k">รับซื้อ</div><div class="prow__v num">${fmt(L.barBuy, 2)}</div></div>
         <div><div class="prow__k">ขายออก</div><div class="prow__v sell num">${fmt(L.barSell, 2)}</div></div>
       </div>
+      <div class="pcard__delta"><span class="chg ${dirClass(chg)}">${arrow(chg)} ${signed(chg)} บาท วันนี้</span></div>
       <div class="pcard__unit">บาท ต่อทองหนัก 1 บาท (${G_PER_BAHT_BAR} กรัม)</div>
     </div>
     <div class="pcard">
@@ -146,6 +147,7 @@ function renderHero() {
         <div><div class="prow__k">รับซื้อ</div><div class="prow__v num">${fmt(L.ornBuy, 2)}</div></div>
         <div><div class="prow__k">ขายออก</div><div class="prow__v sell num">${fmt(L.ornSell, 2)}</div></div>
       </div>
+      <div class="pcard__delta"><span class="chg ${dirClass(chg)}">${arrow(chg)} ${signed(chg)} บาท วันนี้</span></div>
       <div class="pcard__unit">บาท ต่อทองหนัก 1 บาท (${G_PER_BAHT_ORN} กรัม) · ราคาขายรวมค่ากำเหน็จแล้ว</div>
     </div>`;
 
@@ -208,7 +210,7 @@ function renderChart() {
   if (isToday && series.length) series[series.length - 1].y = state.latest.barSell;
   if (series.length < 2) { $("#chart").innerHTML = '<p class="muted">ข้อมูลไม่พอสำหรับวาดกราฟ</p>'; return; }
 
-  const W = 900, H = 320, P = { t: 22, r: 62, b: 34, l: 16 };
+  const W = 900, H = 200, P = { t: 16, r: 56, b: 26, l: 12 };
   const ys = series.map(p => p.y);
   let min = Math.min(...ys), max = Math.max(...ys);
   const pad = Math.max((max - min) * 0.22, 60);
@@ -221,16 +223,16 @@ function renderChart() {
   const area = `${line} L${X(series.length - 1).toFixed(1)},${H - P.b} L${X(0).toFixed(1)},${H - P.b} Z`;
 
   /* เส้นกริดแนวนอน 4 เส้น */
-  const ticks = Array.from({ length: 4 }, (_, i) => min + ((max - min) * (i + .5)) / 4);
+  const ticks = Array.from({ length: 3 }, (_, i) => min + ((max - min) * (i + .5)) / 3);
   const grid = ticks.map(v => `
     <line class="grid" x1="${P.l}" x2="${W - P.r}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke-dasharray="3 4"/>
-    <text class="axis" x="${W - P.r + 8}" y="${(Y(v) + 4).toFixed(1)}">${fmt(Math.round(v))}</text>`).join("");
+    <text class="axis" x="${W - P.r + 7}" y="${(Y(v) + 3.5).toFixed(1)}">${fmt(Math.round(v))}</text>`).join("");
 
   /* ป้ายแกน X — แสดงไม่เกิน 7 ป้าย */
   const step = Math.max(1, Math.ceil(series.length / 7));
   const xlab = series.map((p, i) =>
     (i % step === 0 || i === series.length - 1)
-      ? `<text class="axis" x="${X(i).toFixed(1)}" y="${H - 10}" text-anchor="middle">${p.x}</text>` : "").join("");
+      ? `<text class="axis" x="${X(i).toFixed(1)}" y="${H - 8}" text-anchor="middle">${p.x}</text>` : "").join("");
 
   const lastX = X(series.length - 1), lastY = Y(series[series.length - 1].y);
 
@@ -270,8 +272,8 @@ function renderChart() {
       ${grid}
       <path class="area" d="${area}" mask="url(#fadeMask)"/>
       <path class="line" d="${line}"/>
-      ${series.map((p, i) => `<circle class="pt" cx="${X(i).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${i === series.length - 1 ? 5.5 : 3}"><title>${p.x} · ${fmt(p.y)} บาท</title></circle>`).join("")}
-      <text class="lastlabel" x="${(lastX + 10).toFixed(1)}" y="${(lastY - 12).toFixed(1)}">${fmt(series[series.length - 1].y)}</text>
+      ${series.map((p, i) => `<circle class="pt" cx="${X(i).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${i === series.length - 1 ? 4.5 : 2.4}"><title>${p.x} · ${fmt(p.y)} บาท</title></circle>`).join("")}
+      <text class="lastlabel" x="${(lastX + 8).toFixed(1)}" y="${(lastY - 10).toFixed(1)}">${fmt(series[series.length - 1].y)}</text>
       ${xlab}
     </svg>`;
 }
